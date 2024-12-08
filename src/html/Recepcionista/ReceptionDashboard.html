@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Recepcionista</title>
+    <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="medicDash.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div>
+        <div class="NavBar">
+            <div class="left-section">
+                <img src="user-placeholder.png" alt="USER" class="user-img" />
+                <div class="text-us">
+                    <h2 id="welcome-message">¡Bienvenido, ...!</h2>
+                    <h3 id="work-schedule">Horario: 7:00 AM - 6:00 PM</h3>
+                    <h4 id="receptionist-id">ID: ...</h4>
+                </div>
+            </div>
+            
+            <div class="right-section">
+                <button class="button" aria-label="Configuración">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" className="settings-icon">
+                        <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/>
+                        <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/>
+                    </svg>
+                </button>
+
+                <button class="button">
+                    <svg viewBox="0 0 24 24" class="logout-icon" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 13v-2H7V7l-5 5 5 5v-4h9zm1-10H3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4h-2v4H3V5h14v4h2V5a2 2 0 0 0-2-2z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="Title">
+           <center><h2>Bienvenido al Panel de Recepcionista</h2></center>
+        </div>
+
+        <section class="layout">
+            <div class="botones">
+                <div class="btn-container">
+                    <div class="btn">
+                        <a href="cobro.html">
+                            <button class="button1">
+                                <div class="hand">
+                                    <i class="fa-solid fa-hand-holding-usd"></i>
+                                </div>
+                            </button>
+                        </a>
+                    </div>
+                    <p class="btn-text">Modulo de Cobro</p>
+                </div>
+
+                <div class="btn-container">
+                    <div class="btn">
+                        <a href="ModuloCitas.html">
+                            <button class="button1">
+                                <div class="calendar">
+                                    <div class="agenda">
+                                        <div class="agenda-cover"></div>
+                                        <div class="agenda-spine"></div>
+                                        <div class="agenda-pages"></div>
+                                    </div>            
+                                </div>     
+                            </button>
+                        </a>
+                    </div>
+                    <p class="btn-text">Modulo de Citas</p>
+                </div>
+
+                <div class="btn-container">
+                    <div class="btn">
+                        <a href="Pacientes.html">
+                            <button class="button1">
+                                <div class="file">
+                                    <div class="work-5"></div>
+                                    <div class="work-4"></div>
+                                    <div class="work-3"></div>
+                                    <div class="work-2"></div>
+                                    <div class="work-1"></div>
+                                </div>
+                            </button>
+                        </a>
+                    </div>
+                    <p class="btn-text">Pacientes</p>
+                </div>
+
+                <div class="btn-container">
+                    <div class="btn">
+                        <button class="button1">
+                            <div class="icon specialist">
+                                <div class="circle-head"></div>
+                                <div class="rectangle-body"></div>
+                            </div>
+                        </button>
+                    </div>
+                    <p class="btn-text">Especialistas</p>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script>
+        // Seleccionar los elementos HTML donde se mostrarán los datos
+        const welcomeMessage = document.getElementById("welcome-message");
+        const workSchedule = document.getElementById("work-schedule");
+        const receptionistId = document.getElementById("receptionist-id");
+
+        // Hacer la solicitud al archivo PHP
+        fetch('dashboardR.php')  // Asegúrate de poner la ruta correcta
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Error al comunicarse con el servidor");
+                }
+                return response.json(); // Convertir la respuesta en JSON
+            })
+            .then(data => {
+                if (data.error) {
+                    console.error("Error desde el servidor:", data.error);
+                    welcomeMessage.textContent = "Error al cargar los datos";
+                } else {
+                    // Actualizar el contenido del HTML con los datos del servidor
+                    welcomeMessage.textContent = `¡Bienvenido, ${data.nombre} ${data.apellido}!`;
+                    receptionistId.textContent = `ID: ${data.id}`;
+                }
+            })
+            .catch(error => {
+                console.error("Error en la solicitud:", error);
+                welcomeMessage.textContent = "Error al cargar los datos";
+            });
+    </script>
+</body>
+</html>

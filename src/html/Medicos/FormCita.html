@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Cita</title>
+    <link rel="stylesheet" href="formPaciente.css">
+</head>
+<body>
+    <div class="form-container">
+        <div class="patient-info">
+            <!-- Información del Paciente -->
+            <div class="patient-data">
+                <h2>Información del Paciente</h2>
+                <div class="data-item">
+                    <label>Nombre: </label><span id="nombre"></span>
+                </div>
+                <div class="data-item">
+                    <label>Apellido: </label><span id="apellido"></span>
+                </div>
+                <div class="data-item">
+                    <label>Fecha de Nacimiento: </label><span id="fecha-nacimiento"></span>
+                </div>
+                <div class="data-item">
+                    <label>Teléfono: </label><span id="telefono"></span>
+                </div>
+                <div class="data-item">
+                    <label>Correo Electrónico: </label><span id="correo"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario de cita -->
+        <div class="form-questions">
+            <h2>Formulario de la Cita</h2>
+            <form id="cita-form">
+                <!-- Selección de especialidad -->
+                <div class="form-field">
+                    <label for="especialidad">Especialidad:</label>
+                    <select id="especialidad" name="especialidad" required>
+                        <option value="psicologia">Psicología</option>
+                        <option value="nutricion">Nutrición</option>
+                    </select>
+                </div>
+
+                <!-- ID del expediente -->
+                <div class="form-field">
+                    <label for="id-expediente">ID del Expediente:</label>
+                    <input type="text" id="id-expediente" name="id-expediente" required>
+                </div>
+
+                <!-- Preguntas adicionales -->
+                <div class="form-field">
+                    <label>¿El paciente tiene alergias?</label>
+                    <input type="radio" id="alergias-si" name="alergias" value="si">
+                    <label for="alergias-si">Sí</label>
+                    <input type="radio" id="alergias-no" name="alergias" value="no">
+                    <label for="alergias-no">No</label>
+                </div>
+
+                <div class="form-field">
+                    <label for="tipo-dieta">Tipo de Dieta:</label>
+                    <select id="tipo-dieta" name="tipo-dieta">
+                        <option value="omnivora">Omnívora</option>
+                        <option value="vegetariana">Vegetariana</option>
+                        <option value="vegana">Vegana</option>
+                        <option value="ketogenica">Ketogénica</option>
+                    </select>
+                </div>
+
+                <!-- Información del diagnóstico -->
+                <h3>Diagnóstico</h3>
+                <div class="form-field">
+                    <label for="id-diagnostico">ID del Diagnóstico:</label>
+                    <input type="text" id="id-diagnostico" name="id-diagnostico" required>
+                </div>
+                <div class="form-field">
+                    <label for="nombre-diagnostico">Nombre del Diagnóstico:</label>
+                    <input type="text" id="nombre-diagnostico" name="nombre-diagnostico" required>
+                </div>
+                <div class="form-field">
+                    <label for="descripcion">Descripción:</label>
+                    <textarea id="descripcion" name="descripcion" required></textarea>
+                </div>
+                <div class="form-field">
+                    <label for="categoria">Categoría:</label>
+                    <input type="text" id="categoria" name="categoria" required>
+                </div>
+
+                <!-- Botón para guardar -->
+                <div class="form-buttons">
+                    <button type="button" id="guardar-btn" class="btn-submit">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Obtener ID del paciente de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const pacienteId = urlParams.get('id');
+
+            // Cargar información del paciente
+            if (pacienteId) {
+                fetch(`get_infoPaciente.php?id_paciente=${pacienteId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                        } else {
+                            document.getElementById('nombre').textContent = data.Nombre_Paciente;
+                            document.getElementById('apellido').textContent = data.Apellido_Paciente;
+                            document.getElementById('fecha-nacimiento').textContent = data.Fecha_Nacimiento;
+                            document.getElementById('telefono').textContent = data.Telefono_Contacto;
+                            document.getElementById('correo').textContent = data.Correo_Electronico;
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            } else {
+                alert('No se proporcionó el ID del paciente.');
+            }
+
+            // Guardar datos
+            document.getElementById('guardar-btn').addEventListener('click', () => {
+                const formData = new FormData(document.getElementById('cita-form'));
+                formData.append('id_paciente', pacienteId);
+
+                fetch('guardar_cita.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Cita guardada exitosamente.');
+                    } else {
+                        alert(data.error || 'Hubo un error al guardar la cita.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
+    <title>Modulo de Citas</title>
+    <link rel="stylesheet" href="Historial.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" />
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <h1>Agenda Diaria</h1>
+            <p>Gestiona las citas programadas del día</p>
+            <div>
+                <a href="MedicDashboard.html">
+                    <button type="button" class="regresar">
+                        <span class="button__text">Regresar</span>
+                        <span class="button__icon">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </span>
+                    </button>
+                </a>
+            </div>
+        </header>
+        <main class="dashboard-content">
+            <div id="calendar"></div>
+        </main>
+    </div>
+
+    <!-- Modal para detalles de la cita -->
+    <div id="modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Detalles de la Cita</h2>
+            <div id="modal-body">
+                <!-- Los detalles de la cita se mostrarán aquí -->
+            </div>
+            <div class="form-buttons">
+                <button type="button" class="btn-cancel" id="btn-cancel">Cerrar</button>
+                <!-- Botón para registrar expediente, alineado a la derecha -->
+                <a href="FormCita.html" id="btn-register-link">
+                    <button type="button" class="btn-register">Registrar expediente</button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const calendarEl = document.getElementById('calendar');
+            const modal = document.getElementById('modal');
+            const modalBody = document.getElementById('modal-body');
+            const btnCancel = document.getElementById('btn-cancel'); // Obtener el botón de cancelar
+
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'timeGridDay',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: 'get_citas.php', // El archivo PHP que te traerá las citas
+                editable: true,
+                selectable: true,
+                eventClick: function (info) {
+                    openModal(info.event.id);
+                },
+                eventDrop: function (info) {
+                    fetch('update_event.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            id: info.event.id,
+                            start: info.event.startStr,
+                            end: info.event.endStr,
+                        }),
+                    }).then(() => {
+                        alert('Evento actualizado con éxito');
+                    });
+                },
+            });
+
+            calendar.render();
+
+            function openModal(eventId) {
+                modal.classList.remove('hidden');
+                fetch(`get_paciente.php?id=${eventId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        modalBody.innerHTML = `
+                            <h3>Cita ID: ${data.id_cita}</h3>
+                            <p><strong>ID del Paciente:</strong> ${data.id_paciente}</p>
+                            <p><strong>Cédula Profesional:</strong> ${data.cedula_profesional}</p>
+                            <p><strong>Fecha Programada:</strong> ${data.fecha_programada}</p>
+                            <p><strong>Tipo de Cita:</strong> ${data.tipo_cita}</p>
+                            <p><strong>Consultorio:</strong> ${data.consultorio}</p>
+                            <hr>
+                            <h4>Datos del Paciente:</h4>
+                            <p><strong>Nombre:</strong> ${data.paciente.nombre}</p>
+                            <p><strong>Apellido:</strong> ${data.paciente.apellido}</p>
+                            <p><strong>Fecha de Nacimiento:</strong> ${data.paciente.fecha_nacimiento}</p>
+                            <p><strong>Teléfono:</strong> ${data.paciente.telefono}</p>
+                            <p><strong>Correo:</strong> ${data.paciente.correo}</p>
+                        `;
+
+                        // Modificar el enlace del botón para incluir el ID del paciente
+                        const registerButtonLink = document.getElementById('btn-register-link');
+                        registerButtonLink.href = `FormCita.html?id=${data.id_paciente}`;
+                    })
+                    .catch(error => {
+                        console.error('Error al obtener los detalles de la cita:', error);
+                    });
+            }
+
+            function closeModal() {
+                modal.classList.add('hidden');
+                modalBody.innerHTML = ''; // Limpiar el contenido del modal
+            }
+
+            // Asignar el manejador al botón de cancelar
+            btnCancel.addEventListener('click', closeModal);
+        });
+    </script>
+</body>
+</html>

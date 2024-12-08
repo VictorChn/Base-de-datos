@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
+    <title>Pacientes</title>
+    <link rel="stylesheet" href="RegistroPaciente.css">
+</head>
+<body>
+    <div class="pacientes-module">
+        <h3>Registro de Pacientes</h3>
+
+        <form id="formulario-pacientes">
+            <label for="id_paciente">ID Paciente</label>
+            <input type="text" id="id_paciente" name="id_paciente" placeholder="Ingrese el ID del paciente" required>
+
+            <label for="nombre_paciente">Nombre</label>
+            <input type="text" id="nombre_paciente" name="nombre_paciente" placeholder="Ingrese el nombre" required>
+
+            <label for="apellido_paciente">Apellido</label>
+            <input type="text" id="apellido_paciente" name="apellido_paciente" placeholder="Ingrese el apellido" required>
+
+            <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+            <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
+
+            <label for="telefono_contacto">Teléfono de Contacto</label>
+            <input type="tel" id="telefono_contacto" name="telefono_contacto" placeholder="Ingrese el teléfono" required>
+
+            <label for="correo_electronico">Correo Electrónico</label>
+            <input type="email" id="correo_electronico" name="correo_electronico" placeholder="Ingrese el correo" required>
+
+            <button type="submit" class="registrar">Registrar Paciente</button>
+        </form>
+        
+        <a href="ReceptionDashboard.html"><button id="return" class="return">Regresar</button></a>
+    </div>
+
+    <script>
+        document.getElementById('formulario-pacientes').addEventListener('submit', async function (e) {
+            e.preventDefault(); // Prevenir redirección
+
+            const formData = new FormData(this);
+
+            try {
+                const response = await fetch('insert_patient_data.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert(result.success); // Mostrar notificación de éxito
+                } else {
+                    alert(result.error); // Mostrar error como ventana emergente
+                }
+            } catch (error) {
+                alert('Error al procesar la solicitud: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>

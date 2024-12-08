@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
+    <title>Modulo de Cobro</title>
+    <link rel="stylesheet" href="cobro.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard-container">
+            <header class="dashboard-header">
+                <h1>Módulo de Cobro</h1>
+                <p>Bienvenida al sistema de cobros</p>
+
+                <div>
+                    <a href="ReceptionDashboard.html">
+                        <button type="button" class="regresar">
+                            <span class="button__text">Regresar</span>
+                            <span class="button__icon">
+                                <i class="fa-solid fa-arrow-left"></i>
+                            </span>
+                        </button>
+                    </a>
+                </div>
+            </header>
+            
+            <main class="dashboard-content">
+                <section class="module-section">
+                    <h2>Generar Cobro</h2>
+                    <div class="form-group">
+                        <label for="patient-search">Buscar Paciente:</label>
+                        <input type="text" id="patient-search" class="form-control" placeholder="Nombre o ID del paciente">
+                    </div>
+
+                    <div>
+                        <button type="button" class="buscarpas" id="search-patient">
+                            <span class="button__text">Buscar</span>
+                            <span class="button__icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                        </button>
+                    </div>
+
+                    <div id="patient-info" style="margin-top: 20px;">
+                        <p><strong>Nombre:</strong> <span id="patient-name"></span></p>
+                        <p><strong>Apellido:</strong> <span id="patient-lastname"></span></p>
+                        <p><strong>Teléfono:</strong> <span id="patient-phone"></span></p>
+                        <p><strong>Correo Electrónico:</strong> <span id="patient-email"></span></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="doctor-select">Seleccionar Médico:</label>
+                        <select id="doctor-select" class="form-control">
+                            <option value="">Seleccione un médico</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tarifa del Médico:</label>
+                        <p id="doctor-fee">$0.00</p>
+                    </div>                 
+
+                    <div>
+                        <button type="button" class="button" id="add-doctor">
+                            <span class="button__text">Añadir</span>
+                            <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
+                        </button>
+                    </div>
+
+                    <div>
+                        <p id="total-cobro">Total cobro: $0.00</p>
+                    </div>                
+
+                    <table class="fee-table">
+                        <thead>
+                            <tr>
+                                <th>Médico</th>
+                                <th>Especialidad</th>
+                                <th>Tarifa</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fee-details">
+                        </tbody>
+                    </table>
+
+                    <div class="generate-pdf">
+                        <button class="btn-primary" id="generate-pdf">Generar PDF</button>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <script>
+            const doctorSelect = document.getElementById("doctor-select");
+
+            let especialistas = [];
+
+            fetch('get_specialist.php')  
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Error al comunicarse con el servidor");
+                    }
+                    return response.json(); 
+                })
+                .then(data => {
+                    if (data.error) {
+                        console.error("Error desde el servidor:", data.error);
+                    } else {
+                        doctorSelect.innerHTML = '<option value="">Seleccione un médico</option>';
+                        especialistas = data;
+
+                        data.forEach(specialist => {
+                            const option = document.createElement("option");
+                            option.value = specialist.Cedula_Profesional;
+                            option.textContent = `${specialist.especialista} - $${specialist.Tarifa}`;
+                            option.setAttribute('data-tarifa', specialist.Tarifa);
+                            option.setAttribute('data-especialidad', specialist.especialidad); 
+                            doctorSelect.appendChild(option);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error("Error en la solicitud:", error);
+                });
+
+            let totalTarifa = 0;
+
+            function actualizarTarifa() {
+                const selectedOption = doctorSelect.options[doctorSelect.selectedIndex];
+                const tarifa = parseFloat(selectedOption.getAttribute('data-tarifa'));
+                document.getElementById("doctor-fee").textContent = `$${tarifa.toFixed(2)}`;
+                totalTarifa += tarifa;
+                document.getElementById("total-cobro").textContent = `Total: $${totalTarifa.toFixed(2)}`;
+            }
+
+            document.getElementById("add-doctor").addEventListener("click", function() {
+                const selectedDoctor = doctorSelect.value;
+                if (selectedDoctor) {
+                    actualizarTarifa();
+
+                    const doctor = especialistas.find(especialista => especialista.Cedula_Profesional === selectedDoctor);
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${doctor.especialista}</td>
+                        <td>${doctor.Especialidad}</td> <!-- Mostrar la especialidad -->
+                        <td>$${doctor.Tarifa}</td>
+                    `;
+                    document.getElementById("fee-details").appendChild(row);
+                }
+            });
+
+            document.getElementById("search-patient").addEventListener("click", function() {
+                const patientId = document.getElementById("patient-search").value.trim();
+                if (!patientId) {
+                    alert("Por favor ingrese un ID de paciente.");
+                    return;
+                }
+
+                fetch(`get_patient_data.php?idPaciente=${patientId}`)
+                    .then(response => response.json())
+                    .then(patientData => {
+                        if (patientData.error) {
+                            alert("Error: " + patientData.error);
+                        } else {
+                            document.getElementById("patient-name").textContent = patientData.Nombre_Paciente;
+                            document.getElementById("patient-lastname").textContent = patientData.Apellido_Paciente;
+                            document.getElementById("patient-phone").textContent = patientData.Telefono_Contacto;
+                            document.getElementById("patient-email").textContent = patientData.Correo_Electronico;
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error al obtener los datos del paciente:", error);
+                    });
+            });
+
+            document.getElementById("generate-pdf").addEventListener("click", function() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                const patientId = document.getElementById("patient-search").value.trim();
+                const patientName = document.getElementById("patient-name").textContent;
+                const patientLastName = document.getElementById("patient-lastname").textContent;
+                const patientPhone = document.getElementById("patient-phone").textContent;
+                const patientEmail = document.getElementById("patient-email").textContent;
+
+                if (!patientId || !patientName || !patientLastName || !patientPhone || !patientEmail) {
+                    alert("Por favor, asegúrese de que todos los datos del paciente están cargados.");
+                    return;
+                }
+
+                const totalAmount = document.getElementById("total-cobro").textContent;
+
+                doc.text(`Ficha de Pago\n`, 10, 10);
+                doc.text(`ID del Paciente: ${patientId}\n`, 10, 20);
+                doc.text(`Nombre: ${patientName} ${patientLastName}\n`, 10, 30);
+                doc.text(`Teléfono: ${patientPhone}\n`, 10, 40);
+                doc.text(`Correo Electrónico: ${patientEmail}\n`, 10, 50);
+                doc.text(`Total a Pagar: ${totalAmount}\n`, 10, 60);
+                doc.text(`\nDetalles de la Consulta:\n`, 10, 70);
+
+                const rows = document.querySelectorAll("#fee-details tr");
+                rows.forEach((row, index) => {
+                    const columns = row.getElementsByTagName("td");
+                    const doctorName = columns[0].textContent;
+                    const specialty = columns[1].textContent;
+                    const fee = columns[2].textContent;
+
+                    doc.text(`${doctorName} - ${specialty} - ${fee}\n`, 10, 100 + index * 10);
+                });
+
+                doc.save("ficha_pago.pdf");
+            });
+        </script>  
+    </div>
+</body>
+</html>

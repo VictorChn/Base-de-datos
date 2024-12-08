@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medic App</title>
+    <link rel="stylesheet" href="/src/css/index.css">
+    <link rel="icon" href="src/img/favicon.ico" type="image/x-icon">
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.2.0/css/all.css'>
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css'>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    
+    <div class="container">
+        <div class="screen">
+            <div class="screen__content">
+                <!-- Formulario con el método POST para enviar datos -->
+                <form class="login" action="login.php" method="POST">
+                    <div class="logo">
+                        <img src="src/img/favicon.ico" alt="Medic App">
+                    </div>
+                    <div class="login__field">
+                        <i class="login__icon fas fa-user"></i>
+                        <!-- El name es necesario para acceder a este valor en el PHP -->
+                        <input type="text" name="nombre_usuario" class="login__input" placeholder="User name / ID" required>
+                    </div>
+                    <div class="login__field">
+                        <i class="login__icon fas fa-lock"></i>
+                        <!-- El name es necesario para acceder a este valor en el PHP -->
+                        <input type="password" name="contrasena" class="login__input" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="button login__submit">
+                        <span class="button__text">Log In</span>
+                        <i class="button__icon fas fa-chevron-right"></i>
+                    </button>				
+                </form>
+            </div>
+            <div class="screen__background">
+                <span class="screen__background__shape screen__background__shape4"></span>
+                <span class="screen__background__shape screen__background__shape3"></span>		
+                <span class="screen__background__shape screen__background__shape2"></span>
+                <span class="screen__background__shape screen__background__shape1"></span>
+            </div>		
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
+    <title>Modulo de Citas</title>
+    <link rel="stylesheet" href="Citas.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" />
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <h1>Agenda Mensual</h1>
+            <p>Gestiona las citas programadas del mes</p>
+            <div>
+                <a href="ReceptionDashboard.html">
+                    <button type="button" class="regresar">
+                        <span class="button__text">Regresar</span>
+                        <span class="button__icon">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </span>
+                    </button>
+                </a>
+            </div>
+        </header>
+        <main class="dashboard-content">
+            <div id="calendar"></div>
+        </main>
+    </div>
+
+    <div id="modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Crear nueva cita</h2>
+            <form id="event-form">
+                <div class="form-group">
+                    <label for="id-patient">ID del Paciente</label>
+                    <input type="text" id="id-patient" name="id-patient" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="patient">Nombre del Paciente</label>
+                    <input type="text" id="patient" name="patient" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="doctor">Nombre del Médico</label>
+                    <select id="doctor" name="doctor" required>
+                        <option value="" disabled selected>Elegir Médico</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="cedula">Cédula Profesional</label>
+                    <input type="text" id="cedula" name="cedula" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="date">Horario de la Cita</label>
+                    <input type="datetime-local" id="date" name="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="appointment-type">Tipo de Cita</label>
+                    <select id="appointment-type" name="appointment-type" required>
+                        <option value="" disabled selected>Elegir el tipo de cita</option>
+                        <option value="psicologo">Psicologo</option>
+                        <option value="nutricionista">Nutricionista</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="consulting-room">Consultorio</label>
+                    <input type="text" id="consulting-room" name="consulting-room" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Observaciones</label>
+                    <textarea id="notes" name="notes" rows="3"></textarea>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="submit" class="btn-save">Guardar</button>
+                    <button type="button" class="btn-cancel" onclick="closeModal(event)">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const calendarEl = document.getElementById('calendar');
+            const modal = document.getElementById('modal');
+            const eventForm = document.getElementById('event-form');
+            const doctorDropdown = document.getElementById('doctor');
+            const cedulaInput = document.getElementById('cedula');
+
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: 'get_events.php', 
+                editable: true,
+                selectable: true,
+                select: function (info) {
+                    openModal(info);
+                },
+                eventClick: function (info) {
+                    if (confirm('¿Deseas eliminar este evento?')) {
+                        fetch('delete_event.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ id: info.event.id }),
+                        }).then(response => response.json())
+                          .then(responseData => {
+                                if (responseData.status === "success") {
+                                    info.event.remove();  
+                                    alert('Evento eliminado con éxito');
+                                } else {
+                                    alert('Error al eliminar el evento');
+                                }
+                        });
+                    }
+                },
+                eventDrop: function (info) {
+                    fetch('update_event.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            id: info.event.id,
+                            start: info.event.startStr,
+                            end: info.event.endStr,
+                        }),
+                    }).then(() => {
+                        alert('Evento actualizado con éxito');
+                    });
+                },
+            });
+
+            calendar.render();
+
+            function openModal(info) {
+                modal.classList.remove('hidden');
+                eventForm.onsubmit = function (e) {
+                    e.preventDefault();
+                    const formData = new FormData(eventForm);
+                    const data = Object.fromEntries(formData.entries());
+
+                    fetch('add_event.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data),
+                    })
+                    .then(response => response.json())
+                    .then(responseData => {
+                        console.log(responseData);
+                        calendar.refetchEvents();
+                        closeModal(e);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                };
+            }
+
+            function closeModal(e) {
+                e.preventDefault();
+                modal.classList.add('hidden');
+                eventForm.reset();
+            }
+
+            fetch('ModAgenda.php')
+                .then(response => response.json())
+                .then(data => {
+                    doctorDropdown.innerHTML = '<option value="" disabled selected>Elegir Médico</option>';
+                    data.forEach(doctor => {
+                        const option = document.createElement('option');
+                        option.value = doctor.ID_Especialista;
+                        option.textContent = doctor.full_name;
+                        option.setAttribute('data-cedula', doctor.Cedula_Profesional);
+                        doctorDropdown.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error("Error al cargar los médicos:", error);
+                });
+
+            doctorDropdown.addEventListener('change', () => {
+                const selectedOption = doctorDropdown.options[doctorDropdown.selectedIndex];
+                const cedula = selectedOption.getAttribute('data-cedula');
+                cedulaInput.value = cedula || '';
+            });
+        });
+    </script>
+</body>
+</html>

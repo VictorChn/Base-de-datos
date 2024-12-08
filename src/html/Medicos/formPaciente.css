@@ -1,0 +1,111 @@
+/* Estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding-top: 30px;
+}
+
+/* Contenedor principal */
+.form-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Estilo de la información del paciente */
+.patient-info {
+    background-color: #7E7BB9;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.patient-data h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.data-item {
+    margin-bottom: 10px;
+}
+
+.data-item label {
+    font-weight: bold;
+}
+
+.data-item span {
+    font-size: 16px;
+}
+
+/* Estilo de las preguntas del formulario */
+.form-questions h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Estilos del formulario */
+.form-field {
+    margin-bottom: 15px;
+}
+
+.form-field label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.form-field input,
+.form-field select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+    background-color: #f9f9f9;
+}
+
+.form-field input[type="date"]:focus,
+.form-field select:focus {
+    border-color: #0056b3;
+    outline: none;
+}
+
+/* Botón de envío */
+.form-buttons {
+    text-align: center;
+}
+
+.btn-submit {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 24px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-submit:hover {
+    background-color: #45a049;
+}

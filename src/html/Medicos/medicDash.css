@@ -1,0 +1,402 @@
+:root {
+    --primary: #DD946F ;
+    --primary-hover: #CD7D7C;                
+    --secondary: #EFD0F8;
+    --secondary-hover: #B8A1D9;
+    --aura: #9265CA80;
+    --background: #261E5A;
+}
+
+body{
+    background: linear-gradient(90deg, #b5b2f6, #6aa5e8);
+}
+
+.layout {
+  width: 100%;
+
+  display: flex;
+  gap: 4em;
+  justify-content: center;
+  align-items: center;
+}
+
+.NavBar{ 
+    width: 90vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--background);
+    padding: 1rem 3rem;
+    border: 3px solid black;
+}
+
+.left-section{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 1rem;
+}
+
+.text-us{
+    color: var(--secondary);
+}
+
+.text-us h2 {
+    margin-bottom: 0;
+}
+
+.text-us h3 {
+    margin-top: 0;
+    font-size: 1rem;
+}
+
+.text-us h2,
+.text-us h3 {
+    text-align: left;
+}
+
+.right-section {
+    display: flex;
+    gap: 1.5rem;
+}
+
+
+.button2 {
+    background-color: var(--primary);
+    color: var(--background);
+    white-space: nowrap;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+    line-height: 3.125rem;
+    outline: none;
+    font-size: 1.125rem;
+    letter-spacing: .025em;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 800;
+    min-height: 3.125rem;
+    width: 100%;
+    border-radius: 0.5rem;
+    box-shadow: 0 5px 10px rgba(0,0,0,.15);
+    transition: all .3s ease;
+    -webkit-transition: all .3s ease;
+}
+
+.button2:hover {
+    background-color: var(--primary-hover);
+}
+
+
+
+.button {
+    background-color: rgb(44, 44, 44);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color .3s;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.13);
+    border: none;
+  }
+  
+  .settings-icon {
+    width: 28px;
+  }
+  
+  .settings-icon path {
+    fill: white;
+  }
+  
+  .button:hover {
+    background-color: rgb(56, 56, 56);
+  }
+  
+  .button:hover .settings-icon {
+    animation: RotateConfig 2s both;
+  }
+
+  .logout-icon {
+    width: 30px;
+    transform: rotate(180deg);
+  }
+
+  .logout-icon path{
+    fill: red;
+  }
+  
+  .button:hover .logout-icon {
+    animation: RotateExit 0.9s both;
+  }
+  
+
+  @keyframes RotateConfig {
+    from {
+        transform: rotate(360deg);
+      }
+      to {
+        transform: rotate(0deg);
+      }
+  }
+
+
+  @keyframes RotateExit {
+    from {
+        transform: rotate(180deg);
+      }
+      to {
+        transform: rotate(-180deg);
+      }
+  }
+
+  .Title{
+    align-items: center;
+  }
+
+  .botones{
+    display: flex;
+    gap: 1em;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 8.2em;
+    height: 8.2em;
+    background-color: #171717;
+    border-radius: 10px;
+  }
+
+  .btn-text{
+    font-size: 1em;
+    font-family: Montserrat, sans-serif;
+    color: #ffffff;
+    margin-top: 2em;
+    text-align: center;
+    pointer-events: none;
+  }
+  
+  .button1 {
+    width: 9.7em;
+    height: 9.7em;
+    border-radius: 10px;
+    border: 40;
+    outline: none;
+    background-color: #c7c3c0;
+    box-shadow: rgba(0, 0, 0, 0.377) 10px 10px 8px,
+      #ffffff 1.5px 1.5px 2px 0px inset, #c7c3c0 -3.2px -3.2px 8px 0px inset;
+    cursor: pointer;
+    font-family: Montserrat;
+    transition: 0.1s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .svg2 {
+    fill: #5f5f5f;
+    width: 25px;
+    height: 25px;
+    transition: 0.1s ease-in-out;
+  }
+
+
+.button1:active {
+  box-shadow: rgba(0, 0, 0, 0.377) 0px 0px 0px, inset 0.5px 0.5px 4px #000000,
+    #c7c3c0 -3.2px -3.2px 8px 0px inset;
+}
+
+.button1:active .svg2 {
+  scale: 0.95;
+}
+
+
+
+
+  .file {
+    position: relative;
+    width: 6.5em;
+    height: 4.5em;
+    perspective: 1000px;
+  }
+  
+  .work-5,
+  .work-4,
+  .work-3,
+  .work-2,
+  .work-1 {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    transform-origin: bottom;
+  }
+  
+  .work-5 {
+    background-color: #ffc107; 
+    transform: translateZ(0.5em);
+    box-shadow:0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .work-4 {
+    background-color: #dedede; 
+    transform: translateZ(0.4em);
+  }
+  
+  .work-3 {
+    background-color: #d6d6d6;
+    transform: translateZ(0.3em);
+  }
+  
+  .work-2 {
+    background-color: #cacaca;
+    transform: translateZ(0.3em);
+  }
+  
+  .work-1 {
+    background: linear-gradient(to top, #ffc107, #ffca28);
+    border: 10px #000000;
+    transform: translateZ(0.3em);
+  }
+
+
+  .file:hover .work-5 {
+    transform: translateY(-2px) rotateX(-10deg);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  }
+  
+  .file:hover .work-4 {
+    transform: translateY(2) rotateX(-5deg);
+  }
+  
+  .file:hover .work-3 {
+    transform: translateY(4px) rotateX(0deg);
+  }
+  
+  .file:hover .work-2 {
+    transform: translateY(8px) rotateX(5deg);
+  }
+  
+  .file:hover .work-1 {
+    transform: translateY(15px) rotateX(10deg);
+  }
+
+  #calendar-container {
+    width: 400px;
+    height: 600px;
+    overflow-y: scroll;
+    position: relative;
+    background-color: #f9f9f9;
+}
+
+#calendar-date {
+    text-align: center;
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+#calendar-scrollable {
+    position: relative;
+}
+
+.calendar-hour-row {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    border-bottom: 1px solid #ddd;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+#current-time-indicator {
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: red;
+    top: 0; 
+}
+
+.calendar-hour-row.current-time {
+    background-color: #ffeb3b;
+}
+
+#current-time-text {
+    position: absolute;
+    color: white;
+    background-color: red;
+    padding: 2px 6px;
+    top: -20px;
+    right: 0; 
+}
+
+
+.calendar-container {
+    width: 400px;
+    max-width: 500px;
+    margin: 20px auto;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    color: #333;
+    position: relative;
+  }
+  
+  .calendar-title {
+    color: white;
+    margin-bottom: 10px;
+    font-size: 24px;
+  }
+  
+  .calendar-date {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #333;
+    padding: 5px 0;
+    border-radius: 4px;
+  }
+  
+  .calendar-scrollable {
+    height: 400px;
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow-y: scroll;
+    background: #f9f9f9;
+  }
+  
+  .calendar-hour-row {
+    height: 60px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+  }
+  
+  .calendar-hour-label {
+    font-size: 14px;
+    color: #333;
+  }
+  
